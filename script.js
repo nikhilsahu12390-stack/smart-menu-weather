@@ -6,6 +6,8 @@ const firebaseConfig = {
   messagingSenderId: "739249916204",
   appId: "1:739249916204:web:3a76e0f4b27e13521b8489"
 };
+
+
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
 
@@ -29,19 +31,24 @@ window.addToCart = function(name, priceStr) {
 function updateCartUI() {
     const cartBtn = document.getElementById('floating-cart-btn');
     const modal = document.getElementById('cart-modal');
+    if(!cartBtn || !modal) return;
+    
     if(cart.length > 0) {
         cartBtn.style.display = 'block';
         cartBtn.innerHTML = `🛒 View Cart (${cart.length})`;
     } else {
         cartBtn.style.display = 'none';
         modal.style.display = 'none';
-        document.getElementById('cart-overlay').style.display = 'none';
+        const overlay = document.getElementById('cart-overlay');
+        if(overlay) overlay.style.display = 'none';
     }
 }
 
 window.toggleCart = function() {
     const modal = document.getElementById('cart-modal');
     const overlay = document.getElementById('cart-overlay');
+    if(!modal || !overlay) return;
+
     const isHidden = modal.style.display !== 'block';
     modal.style.display = isHidden ? 'block' : 'none';
     overlay.style.display = isHidden ? 'block' : 'none';
@@ -50,6 +57,7 @@ window.toggleCart = function() {
 
 function renderCartItems() {
     const container = document.getElementById('cart-items-container');
+    if(!container) return;
     container.innerHTML = cart.map((item, index) => `
         <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
             <span>${item.name}</span> <b>${item.price}</b>
@@ -65,13 +73,16 @@ window.removeFromCart = function(index) {
 }
 
 window.checkout = function() {
-    const msg = `Order: ` + cart.map(i => `${i.name} (${i.price})`).join(', ');
+    if(cart.length === 0) return;
+    const msg = `Order from Doon Cafe:\n` + cart.map((i, idx) => `${idx+1}. ${i.name} (${i.price})`).join('\n');
     window.open(`https://api.whatsapp.com/send?phone=919999999999&text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 // 🍽️ MENU & WEATHER LOGIC
 async function initMenu() {
     const menuContainer = document.getElementById("menu-container");
+    if(!menuContainer) return;
+
     const staticMenu = [
         { category: "PASTA", items: [{name: "Saffron Pasta", price: "₹395"}, {name: "Pomodoro", price: "₹395"}] },
         { category: "PIZZA", items: [{name: "Margherita", price: "₹395"}, {name: "Loaded Chicken", price: "₹475"}] }
@@ -88,19 +99,42 @@ async function initMenu() {
         
         snapshot.forEach(doc => {
             const item = doc.data();
-            if (item.Weather?.toLowerCase() === weatherMode) {
-                html += `<div class="special-card">🌟 ${item.Name} - ${item.Price}</div>`;
+            
+            // 🔥 SAFE ACCESS: Dono (Capital/Small) check kar raha hai
+            const w = item.Weather || item.weather || "";
+            const n = item.Name || item.name || "Menu Item";
+            const p = item.Price || item.price || "N/A";
+            const emoji = item.Emoji || item.emoji || "🍽️";
+
+            if (w.toLowerCase() === weatherMode) {
+                // String escape for onclick
+                const safeName = n.toString().replace(/'/g, "\\'");
+                html += `
+                    <div class="special-card" style="padding: 20px; background: white; border: 2px solid #4f46e5; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <span style="font-size: 30px;">${emoji}</span>
+                        <h3 style="margin: 5px 0;">${n}</h3>
+                        <p style="font-weight: bold; color: #10b981;">${p}</p>
+                        <button onclick="addToCart('${safeName}', '${p}')" style="background: #4f46e5; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">Add +</button>
+                    </div>`;
             }
         });
 
         staticMenu.forEach(cat => {
-            html += `<h3>${cat.category}</h3><div class="menu-grid">` + 
-                cat.items.map(i => `<div class="item-card">${i.name} <b>${i.price}</b><button onclick="addToCart('${i.name}','${i.price}')">Add +</button></div>`).join('') +
+            html += `<h3 style="margin-top: 30px;">${cat.category}</h3><div class="menu-grid">` + 
+                cat.items.map(i => `
+                    <div class="item-card" style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee;">
+                        <div style="font-weight: 600;">${i.name}</div>
+                        <div style="color: #059669; font-weight: bold;">${i.price}</div>
+                        <button onclick="addToCart('${i.name.replace(/'/g, "\\'")}','${i.price}')" style="margin-top: 10px; width: 100%; background: #1f2937; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer;">Add +</button>
+                    </div>`).join('') +
                 `</div>`;
         });
 
         menuContainer.innerHTML = html;
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error("Menu Load Error:", e);
+        menuContainer.innerHTML = "<p>Menu load karne mein dikkat aayi. Refresh karke dekhein.</p>";
+    }
 }
 
 window.onload = initMenu;
