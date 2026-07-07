@@ -7,15 +7,113 @@ const firebaseConfig = {
   appId: "1:739249916204:web:3a76e0f4b27e13521b8489"
 };
 
-// Firebase Initialize karna
-firebase.initializeApp(firebaseConfig);
+// Firebase Initialize
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.firestore();
 
-// Dehradun (Rajpur Road) Coordinates
+// Dehradun Coordinates
 const LAT = "30.3165";
 const LON = "78.0322";
 
-// 2. Main Function: Weather check karna, Special highlight karna aur Poora Menu load karna
+// 📜 HARDCODED FULL MENU DATA (Mausam se alag, hmesha dikhega)
+const staticMenu = [
+    {
+        category: "🍝 PASTA",
+        items: [
+            { name: "Saffron Leaf Signature Pasta", price: "₹395" },
+            { name: "Pomodoro Veg/Non-Veg Pasta", price: "₹395/475" },
+            { name: "Genoa Pesto Veg/Non-Veg Pasta", price: "₹395/445" },
+            { name: "Ek Hot Arrabbiata Veg/Non-Veg", price: "₹325/375" },
+            { name: "Alfredo Lala Veg/Non-Veg Pasta", price: "₹395/445" }
+        ]
+    },
+    {
+        category: "🍕 PIZZA",
+        items: [
+            { name: "Margherita Pizza 10\" & 12\"", price: "₹395/445" },
+            { name: "Loaded Chicken Pizza 10\" & 12\"", price: "₹475/545" },
+            { name: "Chinawala Chicken Pizza 10\" & 12\"", price: "₹495/545" },
+            { name: "Chinawala Paneer Pizza 10\" & 12\"", price: "₹375/495" },
+            { name: "Murgh Makhanwala Pizza 10\" & 12\"", price: "₹495/575" },
+            { name: "All Veggies Pizza 10\" & 12\"", price: "₹395/425" }
+        ]
+    },
+    {
+        category: "🥟 DIM SUMS",
+        items: [
+            { name: "Veg Momo", price: "₹225" },
+            { name: "Paneer Momo", price: "₹325" },
+            { name: "Chicken Momo", price: "₹375" },
+            { name: "Crystal Momo Veg/Non-veg", price: "₹445/495" },
+            { name: "Atta Momo Veg/Non-veg", price: "₹325/375" },
+            { name: "Tandoori Momo Veg/Non-veg", price: "₹325/375" }
+        ]
+    },
+    {
+        category: "🥪 SANDWICH & BURGER",
+        items: [
+            { name: "Club Sandwich Veg/Non-Veg", price: "₹395/425" },
+            { name: "Grilled Sandwich Veg/Non-Veg", price: "₹345/425" },
+            { name: "Kathi Roll Veg/Non-Veg", price: "₹375/475" },
+            { name: "Egg Roll", price: "₹395" },
+            { name: "Veg Farmhouse Burger", price: "₹375" },
+            { name: "Bbq Chicken Cheese Burger", price: "₹475" },
+            { name: "Classic American Burger Non-Veg", price: "₹475" }
+        ]
+    },
+    {
+        category: "🍲 SOUP",
+        items: [
+            { name: "Cream Soup (Tomato/Mushroom/Veg/Chicken)", price: "₹195/225" },
+            { name: "Lung-Fung Soup Veg/Non-Veg", price: "₹195/225" },
+            { name: "Manchow Soup Veg/Non-Veg", price: "₹195/225" },
+            { name: "Hot N Sour Soup Veg/Non-Veg", price: "₹195/225" },
+            { name: "Sweet Corn Soup Veg/Non-Veg", price: "₹195/225" },
+            { name: "Baked Vegetable Soup", price: "₹245" }
+        ]
+    },
+    {
+        category: "🍗 NON-VEG MAIN COURSE",
+        items: [
+            { name: "Murgh Tikka Lababdar", price: "₹575/855" },
+            { name: "Kadai Chicken Half/Full", price: "₹575/855" },
+            { name: "Butter Chicken Half/Full", price: "₹575/855" },
+            { name: "Pahadi Chicken Curry Half/Full", price: "₹575/855" },
+            { name: "Chicken Rara Half/Full", price: "₹575/855" },
+            { name: "Chicken Changezi Half/Full", price: "₹575/855" },
+            { name: "Mutton Dooniya Curry", price: "₹595" },
+            { name: "Mutton Rara", price: "₹595" },
+            { name: "Dooniya Fish Curry", price: "₹625" },
+            { name: "Dooniya Prawns Curry", price: "₹1125" },
+            { name: "Kasmiri Mutton Rogan Josh", price: "₹595" }
+        ]
+    },
+    {
+        category: "🍹 BEVERAGES",
+        items: [
+            { name: "Mineral Water", price: "₹60" },
+            { name: "Cold Drink", price: "₹70" },
+            { name: "Masala Tea", price: "₹95" },
+            { name: "Green Tea", price: "₹80" },
+            { name: "Lemon Tea", price: "₹105" },
+            { name: "Fresh Lime Water", price: "₹100" },
+            { name: "Fresh Lime Soda", price: "₹120" },
+            { name: "Masala Lemonade", price: "₹175" },
+            { name: "Blue Curacao", price: "₹195" },
+            { name: "Virgin Mojito", price: "₹175" },
+            { name: "Lemon Ice Tea", price: "₹175" },
+            { name: "Peach Ice Tea", price: "₹175" },
+            { name: "Masala Chach", price: "₹145" },
+            { name: "Sweet Lassi", price: "₹145" },
+            { name: "Cold Coffee", price: "₹195" },
+            { name: "Cold Coffee with Ice Cream", price: "₹245" },
+            { name: "Soda 750 ML", price: "₹50" }
+        ]
+    }
+];
+
 async function checkWeatherAndSetTheme() {
     const badge = document.getElementById("weather-badge");
     const heroTitle = document.getElementById("hero-title");
@@ -23,7 +121,7 @@ async function checkWeatherAndSetTheme() {
     const menuContainer = document.getElementById("menu-container");
 
     try {
-        // Open-Meteo API se live weather data nikalna
+        // Live Weather Fetching
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,rain,weather_code`);
         const data = await response.json();
         
@@ -31,79 +129,55 @@ async function checkWeatherAndSetTheme() {
         const isRain = data.current.rain > 0;
         const weatherCode = data.current.weather_code;
 
-        console.log(`Live Doon Temp: ${temp}°C, Rain: ${isRain}`);
-
         let weatherMode = "cold"; 
-
-        // CSS Themes reset karna
         document.body.classList.remove('theme-rainy', 'theme-sunny', 'theme-cold');
 
-        // Mausam ke hisab se Mode decide karna
         if (isRain || weatherCode >= 51) {
             document.body.classList.add('theme-rainy');
-            badge.innerHTML = "🌧️ Monsoon Mode Active";
-            heroTitle.innerHTML = "Chai & Rains in Doon!";
-            heroDesc.innerHTML = "Outside it's pouring. Enjoy our special hot snacks made just for this weather.";
+            if(badge) badge.innerHTML = "🌧️ Monsoon Mode Active";
+            if(heroTitle) heroTitle.innerHTML = "Chai & Rains in Doon!";
+            if(heroDesc) heroDesc.innerHTML = "Outside it's pouring. Enjoy our special hot snacks.";
             weatherMode = "rainy";
         } 
         else if (temp > 25) {
             document.body.classList.add('theme-sunny');
-            badge.innerHTML = `☀️ Summer Mode (${temp}°C)`;
-            heroTitle.innerHTML = "Beat the Dehradun Heat!";
-            heroDesc.innerHTML = "Cool down instantly with our premium refreshing iced chillers.";
+            if(badge) badge.innerHTML = `☀️ Summer Mode (${temp}°C)`;
+            if(heroTitle) heroTitle.innerHTML = "Beat the Dehradun Heat!";
+            if(heroDesc) heroDesc.innerHTML = "Cool down instantly with our premium refreshing iced chillers.";
             weatherMode = "sunny";
         } 
         else {
             document.body.classList.add('theme-cold');
-            badge.innerHTML = `🥶 Cozy Evening Mode (${temp}°C)`;
-            heroTitle.innerHTML = "Warm & Cozy Vibe";
-            heroDesc.innerHTML = "The hills are cold tonight. Grab something warm to keep you comfortable.";
+            if(badge) badge.innerHTML = `🥶 Cozy Evening Mode (${temp}°C)`;
+            if(heroTitle) heroTitle.innerHTML = "Warm & Cozy Vibe";
+            if(heroDesc) heroDesc.innerHTML = "The hills are cold tonight. Grab something warm.";
             weatherMode = "cold";
         }
 
-        // 🔥 DATABASE SE SAARE ITEMS NIKALNA
+        // 🔥 FIRESTORE SE WEATHER SPECIAL ITEM NIKALNA
         const snapshot = await db.collection("menu items").get();
-        
         let specialItemHTML = "";
-        let fullMenuHTML = "";
 
         snapshot.forEach(doc => {
             const itemData = doc.data();
-            
-            // Capital aur Lowercase field handles
-            const finalName = itemData.Name || itemData.name || "Special Item";
-            const finalEmoji = itemData.Emoji || itemData.emoji || "🍽️";
-            const finalDescription = itemData.Description || itemData.description || "";
-            const finalPrice = itemData.Price || itemData.price || "Market Price";
-            const targetWeather = itemData.Weather || itemData.weather;
+            const targetWeather = itemData.Weather || itemData.weather || "";
 
-            // Card HTML Code (Dynamic parameters ke sath taaki direct sahi text WhatsApp par jaye)
-            const cardHTML = `
-                <div class="bg-white rounded-2xl shadow-md overflow-hidden p-6 border border-gray-100 text-center transition duration-300 hover:shadow-xl">
-                    <div class="text-5xl my-3">${finalEmoji}</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-1">${finalName}</h4>
-                    <p class="text-gray-500 text-xs mb-4 min-h-[32px]">${finalDescription}</p>
-                    <div class="flex justify-between items-center mt-4">
-                        <span class="text-2xl font-extrabold text-indigo-600">${finalPrice}</span>
-                        <button onclick="sendOrder('${finalName.replace(/'/g, "\\'")}', '${finalPrice}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-1.5 px-4 rounded-xl text-sm shadow-sm transition duration-200">
-                            Order 📲
-                        </button>
-                    </div>
-                </div>
-            `;
+            if (targetWeather.toLowerCase() === weatherMode.toLowerCase()) {
+                const finalName = itemData.Name || itemData.name || "Special Item";
+                const finalEmoji = itemData.Emoji || itemData.emoji || "🍽️";
+                const finalDescription = itemData.Description || itemData.description || "";
+                const finalPrice = itemData.Price || itemData.price || "₹0";
 
-            // 1. Agar item ka weather current weather se match hota hai, toh use Special banao
-            if (targetWeather && targetWeather.toLowerCase() === weatherMode.toLowerCase()) {
                 specialItemHTML = `
-                    <div class="mb-10 text-center">
-                        <h3 class="text-xl font-extrabold text-indigo-900 mb-4 inline-block bg-indigo-100 px-4 py-1 rounded-full">🌟 Today's Weather Special</h3>
-                        <div class="max-w-md mx-auto bg-gradient-to-br from-white to-indigo-50/30 rounded-3xl shadow-xl overflow-hidden p-8 border-2 border-indigo-400 text-center transform scale-105 transition duration-300">
-                            <div class="text-7xl my-4 animate-bounce">${finalEmoji}</div>
-                            <h4 class="text-3xl font-bold text-gray-800 mb-2">${finalName}</h4>
-                            <p class="text-gray-600 text-sm mb-6">${finalDescription}</p>
-                            <div class="flex justify-between items-center bg-white p-4 rounded-2xl shadow-inner">
-                                <span class="text-3xl font-black text-indigo-600">${finalPrice}</span>
-                                <button onclick="sendOrder('${finalName.replace(/'/g, "\\'")}', '${finalPrice}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-md transition duration-200">
+                    <div style="margin-bottom: 40px; text-align: center;">
+                        <h3 style="font-size: 22px; font-weight: 800; color: #1e1b4b; background: #e0e7ff; padding: 8px 20px; border-radius: 9999px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">🌟 Today's Weather Special</h3>
+                        <div style="max-w: 420px; margin: 0 auto; background: white; padding: 30px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 3px solid #6366f1; transform: scale(1.02);">
+                            <div style="font-size: 65px; margin-bottom: 15px;">${finalEmoji}</div>
+                            <h4 style="font-size: 24px; font-weight: bold; color: #1f2937; margin-bottom: 8px;">${finalName}</h4>
+                            <p style="color: #4b5563; font-size: 14px; margin-bottom: 20px;">${finalDescription}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: #f9fafb; padding: 12px 20px; border-radius: 16px;">
+                                <span style="font-size: 26px; font-weight: 900; color: #4f46e5;">${finalPrice}</span>
+                                <button onclick="sendOrder('${finalName.replace(/'/g, "\\'")}', '${finalPrice}')" style="background: #4f46e5; color: white; border: none; padding: 12px 26px; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); transition: 0.2s;">
                                     Order Special 📲
                                 </button>
                             </div>
@@ -111,42 +185,61 @@ async function checkWeatherAndSetTheme() {
                     </div>
                 `;
             }
-
-            // 2. Baaki saare items Full Menu ki list me judte jayenge
-            fullMenuHTML += cardHTML;
         });
 
-        // 🔥 POORA LAYOUT SCREEN PAR RENDER KARNA
-        menuContainer.innerHTML = `
-            ${specialItemHTML || '<p class="text-center text-gray-400 mb-6">No special item for this weather today.</p>'}
-            
-            <div class="mt-12 border-t border-gray-200/60 pt-8">
-                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">📜 Explore Our Full Menu</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    ${fullMenuHTML}
+        // 🔥 STATIC FULL MENU KA HTML BANANA (Grid Category Layout)
+        let fullMenuHTML = "";
+        staticMenu.forEach(cat => {
+            let itemsHTML = "";
+            cat.items.forEach(item => {
+                itemsHTML += `
+                    <div style="background: white; padding: 18px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #f3f4f6; display: flex; flex-direction: column; justify-content: space-between; text-align: left;">
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 700; color: #1f2937; margin: 0 0 6px 0; line-height: 1.4;">${item.name}</h4>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; pt: 8px; border-top: 1px dashed #f3f4f6;">
+                            <span style="font-size: 18px; font-weight: 800; color: #10b981;">${item.price}</span>
+                            <button onclick="sendOrder('${item.name.replace(/'/g, "\\'")}', '${item.price}')" style="background: #1f2937; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                                Order 📲
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            fullMenuHTML += `
+                <div style="margin-bottom: 45px;">
+                    <h3 style="font-size: 20px; font-weight: 800; color: #1f2937; border-left: 5px solid #4f46e5; padding-left: 12px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px;">${cat.category}</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;">
+                        ${itemsHTML}
+                    </div>
                 </div>
+            `;
+        });
+
+        // 🔥 DONO KO CONTAINER ME DAALNA
+        menuContainer.innerHTML = `
+            ${specialItemHTML || '<p style="text-align: center; color: #9ca3af; font-style: italic; margin-bottom: 30px;">No specific weather match today. Explore full menu below!</p>'}
+            
+            <div style="margin-top: 50px; border-top: 2px dashed #e5e7eb; padding-top: 40px; max-width: 1100px; margin-left: auto; margin-right: auto; padding-left: 15px; padding-right: 15px;">
+                <h2 style="font-size: 28px; font-weight: 900; color: #1f2937; text-align: center; margin-bottom: 40px; position: relative;">📜 OUR FULL CAFE MENU</h2>
+                ${fullMenuHTML}
             </div>
         `;
 
     } catch (error) {
-        console.error("Failed to load menu:", error);
-        badge.innerHTML = "✨ Doon Special Mode";
-        if(menuContainer) {
-            menuContainer.innerHTML = `<p class="text-center text-gray-500">Connecting to server... Please refresh!</p>`;
-        }
+        console.error("Error building premium layout:", error);
     }
 }
 
-// 3. Smart WhatsApp Function: Ab ye button se seedha dynamic values leta hai
+// WhatsApp redirect function (Direct Item Name aur Price pass karega)
 function sendOrder(itemName, itemPrice) {
-    // Apne client ka real WhatsApp number yahan daalo country code (91) ke sath
+    // Client ka actual mobile number yahan 91 ke sath daalo
     const shopOwnerNumber = "919999999999"; 
-
-    const message = `Hello Doon Cafe! *New Order Alert* 🚨\n\nI scanned your Smart QR and want to order:\n📦 *Item:* ${itemName}\n💰 *Price:* ${itemPrice}\n\nPlease prepare it!`;
-
+    
+    const message = `Hello Doon Cafe! *New Order Alert* 🚨\n\nI want to order:\n📦 *Item:* ${itemName}\n💰 *Price:* ${itemPrice}\n\nPlease prepare it!`;
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${shopOwnerNumber}&text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 }
 
-// Page load par execution trigger karna
 window.onload = checkWeatherAndSetTheme;
