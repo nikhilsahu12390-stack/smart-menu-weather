@@ -1,77 +1,114 @@
 /* style.css */
 
-/* Smooth animation jab theme badlegi */
-body, header, div, span, .menu-item {
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+/* Smooth global transitions jab theme badlegi */
+body, header, div, span, .menu-item, button {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 🔥 Card Ke Liye Premium Floating Animation 🔥 */
+@keyframes floatCard {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0px); }
+}
+
+.menu-item {
+    animation: floatCard 4s ease-in-out infinite;
 }
 
 /* =======================================================
-   🌧️ MONSOON / RAINY THEME (Jab Dehradun me baarish ho)
+   🌧️ MONSOON / RAINY THEME (Deep Cyber-Monsoon Vibe)
    ======================================================= */
 body.theme-rainy {
-    background-color: #0f172a !important; /* Dark Blue-Grey */
-    color: #f8fafc !important;
+    background-color: #0b0f19 !important; /* Ink Black-Blue Background */
+    color: #e2e8f0 !important;
 }
 body.theme-rainy #app-header {
-    background-color: #1e293b !important;
-    border-color: #334155 !important;
+    background-color: rgba(15, 23, 42, 0.8) !important; /* Glassmorphism */
+    backdrop-filter: blur(12px);
+    border-color: #1e293b !important;
 }
 body.theme-rainy #app-header h1 { color: #ffffff !important; }
+body.theme-rainy #weather-badge {
+    background-color: #1e3a8a !important;
+    color: #60a5fa !important;
+}
 body.theme-rainy #hero-banner {
-    background: linear-gradient(135deg, #1d4ed8, #1e40af) !important; /* Deep Blue Vibe */
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important; /* Electric Indigo Gradient */
+    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.35);
 }
-/* Baarish me sirf Rainy items dikhenge, baaki hide ho jayenge */
-body.theme-rainy .menu-item:not([data-weather="rainy"]) {
-    display: none !important;
+/* Dynamic Injected Card Styling for Rainy */
+body.theme-rainy .menu-item {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(59, 130, 246, 0.15);
 }
-body.theme-rainy .menu-item[data-weather="rainy"] {
-    background-color: #1e293b !important;
-    border-color: #3b82f6 !important;
-    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
-}
+body.theme-rainy .menu-item h4 { color: #ffffff !important; }
+body.theme-rainy .menu-item p { color: #9ca3af !important; }
+body.theme-rainy .menu-item .text-indigo-600 { color: #60a5fa !important; } /* Price Color change */
+body.theme-rainy .menu-item button { background-color: #3b82f6 !important; color: white !important; }
+body.theme-rainy .menu-item button:hover { background-color: #2563eb !important; }
 
 /* =======================================================
-   ☀️ SUNNY / SUMMER THEME (Jab dopahar ki dhoop ho)
+   ☀️ SUNNY / SUMMER THEME (Aesthetic Minimalist Warmth)
    ======================================================= */
 body.theme-sunny {
-    background-color: #fffbeb !important; /* Soft Amber Light */
-    color: #78350f !important;
+    background-color: #fdfaf2 !important; /* Premium Soft Cream */
+    color: #451a03 !important;
 }
 body.theme-sunny #app-header {
+    background-color: rgba(254, 243, 199, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border-color: #fee2e2 !important;
+}
+body.theme-sunny #weather-badge {
     background-color: #fef3c7 !important;
-    border-color: #fde68a !important;
+    color: #d97706 !important;
 }
 body.theme-sunny #hero-banner {
-    background: linear-gradient(135deg, #f59e0b, #ea580c) !important; /* Bright Sunset/Sun look */
+    background: linear-gradient(135deg, #f97316, #ea580c) !important; /* Tangerine Sunset Gradient */
+    box-shadow: 0 10px 30px rgba(234, 88, 12, 0.25);
 }
-/* Dhoop me sirf Cold Drinks/Sunny items dikhenge */
-body.theme-sunny .menu-item:not([data-weather="sunny"]) {
-    display: none !important;
-}
-body.theme-sunny .menu-item[data-weather="sunny"] {
+/* Dynamic Injected Card Styling for Sunny */
+body.theme-sunny .menu-item {
     background-color: #ffffff !important;
-    border-color: #f59e0b !important;
+    border-color: #fee2e2 !important;
+    box-shadow: 0 25px 50px -12px rgba(217, 119, 6, 0.08);
 }
+body.theme-sunny .menu-item h4 { color: #451a03 !important; }
+body.theme-sunny .menu-item p { color: #78350f !important; opacity: 0.8; }
+body.theme-sunny .menu-item .text-indigo-600 { color: #ea580c !important; }
+body.theme-sunny .menu-item button { background-color: #ea580c !important; color: white !important; }
+body.theme-sunny .menu-item button:hover { background-color: #c2410c !important; }
 
 /* =======================================================
-   🥶 COLD / WINTER THEME (Thand ya Raat ke waqt)
+   🥶 COLD / WINTER THEME (Cozy Frosted Alpine Vibe)
    ======================================================= */
 body.theme-cold {
-    background-color: #f0fdfa !important; /* Ice Mint Clear White */
+    background-color: #f4f9f9 !important; /* Icy Mint Background */
     color: #115e59 !important;
 }
 body.theme-cold #app-header {
-    background-color: #ccfbf1 !important;
+    background-color: rgba(204, 251, 241, 0.8) !important;
+    backdrop-filter: blur(12px);
     border-color: #99f6e4 !important;
 }
+body.theme-cold #weather-badge {
+    background-color: #ccfbf1 !important;
+    color: #0d9488 !important;
+}
 body.theme-cold #hero-banner {
-    background: linear-gradient(135deg, #0d9488, #0369a1) !important; /* Ice Cold Teal Gradient */
+    background: linear-gradient(135deg, #0f766e, #1e3a8a) !important; /* Deep Emerald & Blue Ocean */
+    box-shadow: 0 10px 30px rgba(15, 118, 110, 0.3);
 }
-/* Thand me sirf Hot Chocolate/Winter items dikhenge */
-body.theme-cold .menu-item:not([data-weather="cold"]) {
-    display: none !important;
-}
-body.theme-cold .menu-item[data-weather="cold"] {
+/* Dynamic Injected Card Styling for Cold */
+body.theme-cold .menu-item {
     background-color: #ffffff !important;
-    border-color: #0d9488 !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 25px 50px -12px rgba(15, 118, 110, 0.08);
 }
+body.theme-cold .menu-item h4 { color: #115e59 !important; }
+body.theme-cold .menu-item p { color: #0f766e !important; opacity: 0.8; }
+body.theme-cold .menu-item .text-indigo-600 { color: #0d9488 !important; }
+body.theme-cold .menu-item button { background-color: #0d9488 !important; color: white !important; }
+body.theme-cold .menu-item button:hover { background-color: #115e59 !important; }
