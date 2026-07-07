@@ -58,8 +58,11 @@ async function checkWeatherAndSetTheme() {
             const weatherCode = data.current.weather_code;
             weatherMode = (isRain || weatherCode >= 51) ? "rainy" : (temp > 25 ? "sunny" : "cold");
         }
-    } catch (e) {
+   } catch (e) {
         console.warn("Weather API down, proceeding with default mode:", e);
+        // --- Ye line add karo ---
+        const badge = document.getElementById("weather-badge");
+        if(badge) badge.innerText = "☁️ Weather Offline"; 
     }
 
     // 2. Render Menu (This part will run even if API fails)
