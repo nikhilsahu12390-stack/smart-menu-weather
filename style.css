@@ -1,5 +1,5 @@
 /* =======================================================
-   PREMIUM MODERN CSS - REPLACING OLD CODE
+   PREMIUM MODERN CSS - UPDATED
    ======================================================= */
 
 /* Global Smooth Transitions */
@@ -9,7 +9,7 @@ body, #app-header, #hero-banner, .menu-item, button {
 
 /* Modern Card Foundation */
 .menu-item {
-    border-radius: 20px; /* Soft rounded corners */
+    border-radius: 20px; 
     padding: 16px;
     border: 1px solid rgba(0, 0, 0, 0.05);
     background: #ffffff;
@@ -17,39 +17,49 @@ body, #app-header, #hero-banner, .menu-item, button {
     will-change: transform, box-shadow;
 }
 
-/* Hover Interaction (The "Premium" feel) */
 .menu-item:hover {
-    transform: translateY(-8px); /* Card halka sa upar uthega */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    border-color: rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* =======================================================
-   THEMES (Refined Colors)
-   ======================================================= */
-
-/* Rainy Theme */
-body.theme-rainy { background-color: #0b0f19; color: #e2e8f0; }
-body.theme-rainy #app-header { background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); }
-body.theme-rainy #hero-banner { background: linear-gradient(135deg, #1e3a8a, #4f46e5); }
-body.theme-rainy .menu-item { background-color: #111827; border: 1px solid #1f2937; }
-
-/* Sunny Theme */
-body.theme-sunny { background-color: #fdfaf2; color: #451a03; }
-body.theme-sunny #app-header { background-color: rgba(254, 243, 199, 0.8); backdrop-filter: blur(10px); }
-body.theme-sunny #hero-banner { background: linear-gradient(135deg, #f97316, #ea580c); }
-body.theme-sunny .menu-item { background-color: #ffffff; border: 1px solid #fee2e2; }
-
-/* Cold Theme */
-body.theme-cold { background-color: #f4f9f9; color: #115e59; }
-body.theme-cold #app-header { background-color: rgba(204, 251, 241, 0.8); backdrop-filter: blur(10px); }
-body.theme-cold #hero-banner { background: linear-gradient(135deg, #0f766e, #115e59); }
-body.theme-cold .menu-item { background-color: #ffffff; border: 1px solid #ccfbf1; }
-
-/* Utility */
-#weather-badge { 
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+/* --- NEW: Marquee Style --- */
+.marquee-wrapper {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 10px 0;
+    overflow: hidden;
+    margin: 20px 0;
+    border-radius: 50px;
+    font-size: 14px;
     font-weight: 600;
 }
+.marquee-content {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scrollText 15s linear infinite;
+}
+@keyframes scrollText {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* --- NEW: Footer Style --- */
+.footer-section {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 40px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+/* --- Themes --- */
+body.theme-rainy { background-color: #0b0f19; color: #e2e8f0; }
+body.theme-rainy .marquee-wrapper { background: rgba(255,255,255,0.05); }
+
+body.theme-sunny { background-color: #fdfaf2; color: #451a03; }
+body.theme-sunny .marquee-wrapper { background: rgba(0,0,0,0.05); }
+
+body.theme-cold { background-color: #f4f9f9; color: #115e59; }
+body.theme-cold .marquee-wrapper { background: rgba(0,0,0,0.05); }
+
+/* ... (Keep your existing Header/Banner/Floating Cart CSS here) ... */
