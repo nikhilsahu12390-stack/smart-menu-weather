@@ -33,37 +33,9 @@
         <h3 class="text-lg font-bold mb-4 px-1">Today's Special Menu</h3>
         <div id="menu-container" class="grid grid-cols-1 gap-4">
             
-            <!-- Item 1: Rainy Special -->
-            <div class="menu-item bg-white p-4 rounded-xl shadow-sm border flex justify-between items-center transition-all duration-300" data-weather="rainy">
-                <div>
-                    <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">1. Monsoon Special</span>
-                    <h4 class="font-bold text-lg mt-1">Adrak Chai & Bread Pakora Combo</h4>
-                    <p class="text-gray-500 text-sm">Perfect match for Dehradun's pleasant rains.</p>
-                    <p class="font-extrabold text-gray-900 mt-2">₹120</p>
-                </div>
-                <div class="text-4xl">☕</div>
-            </div>
-
-            <!-- Item 2: Sunny Special -->
-            <div class="menu-item bg-white p-4 rounded-xl shadow-sm border flex justify-between items-center transition-all duration-300" data-weather="sunny">
-                <div>
-                    <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md">2. Summer Chiller</span>
-                    <h4 class="font-bold text-lg mt-1">Premium Iced Caramel Latte</h4>
-                    <p class="text-gray-500 text-sm">Beat the afternoon heat with crushed ice espresso.</p>
-                    <p class="font-extrabold text-gray-900 mt-2">₹180</p>
-                </div>
-                <div class="text-4xl">🧋</div>
-            </div>
-
-            <!-- Item 3: Cold/Night Special -->
-            <div class="menu-item bg-white p-4 rounded-xl shadow-sm border flex justify-between items-center transition-all duration-300" data-weather="cold">
-                <div>
-                    <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">3. Winter Vibe</span>
-                    <h4 class="font-bold text-lg mt-1">Hot Chocolate with Marshmallows</h4>
-                    <p class="text-gray-500 text-sm">Rich, creamy chocolate served piping hot.</p>
-                    <p class="font-extrabold text-gray-900 mt-2">₹150</p>
-                </div>
-                <div class="text-4xl">🍫</div>
+            <!-- ⏳ Loading Placeholder: Yeh tab tak dikhega jab tak Firestore se data aa raha hai -->
+            <div class="text-center py-8 text-gray-400 animate-pulse font-medium text-sm">
+                ⏳ Loading fresh menu based on Doon weather...
             </div>
 
         </div>
@@ -76,6 +48,13 @@
         </button>
     </footer>
 
+    <!-- 🔥 FIREBASE CORES & FIRESTORE KICKSTARTERS 🔥 -->
+    <!-- Pehle Firebase App load hoga -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Fir Firestore Database load hoga -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <!-- Sabse aakhri me tumhari apni script chalegi -->
     <script src="script.js"></script>
 </body>
 </html>
