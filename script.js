@@ -1,10 +1,10 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyBQT0bQYJlHwV0zUQGmQTBiFSauYhdAEOc",
-  authDomain: "summer-weather-menu.firebaseapp.com",
-  projectId: "summer-weather-menu",
-  storageBucket: "summer-weather-menu.firebasestorage.app",
-  messagingSenderId: "739249916204",
-  appId: "1:739249916204:web:3a76e0f4b27e13521b8489"
+    apiKey: "AIzaSyBQT0bQYJlHwV0zUQGmQTBiFSauYhdAEOc",
+    authDomain: "summer-weather-menu.firebaseapp.com",
+    projectId: "summer-weather-menu",
+    storageBucket: "summer-weather-menu.firebasestorage.app",
+    messagingSenderId: "739249916204",
+    appId: "1:739249916204:web:3a76e0f4b27e13521b8489"
 };
 
 // Initialize Firebase
@@ -34,7 +34,6 @@ function addToCart(name, price) {
     cart.push({ name, price });
     const btn = document.getElementById('cart-float');
     if (btn) btn.innerHTML = `🛒 View Cart (${cart.length})`;
-    // Optional: alert(`${name} added!`);
 }
 
 function checkout() {
@@ -48,7 +47,6 @@ function checkout() {
 }
 
 async function checkWeatherAndSetTheme() {
-    const badge = document.getElementById("weather-badge");
     const menuContainer = document.getElementById("menu-container");
 
     try {
@@ -81,12 +79,11 @@ async function checkWeatherAndSetTheme() {
         staticMenu.forEach(cat => {
             let itemsHTML = "";
             cat.items.forEach(item => {
-                // Safety check for empty data
                 if (!item.name) return;
                 const safeName = item.name.replace(/'/g, "\\'");
                 itemsHTML += `
-                    <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
-                        <h4 style="font-size: 13px; font-weight: 600; margin: 0 0 8px 0; height: 32px; overflow: hidden;">${item.name}</h4>
+                    <div class="menu-item">
+                        <h4 style="font-size: 13px; font-weight: 600; margin: 0 0 8px 0;">${item.name}</h4>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                             <span style="font-size: 14px; font-weight: 800; color: #10b981;">${item.price}</span>
                             <button onclick="addToCart('${safeName}', '${item.price}')" style="background: #1f2937; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Add ➕</button>
@@ -98,7 +95,22 @@ async function checkWeatherAndSetTheme() {
             </div>`;
         });
 
-        menuContainer.innerHTML = specialItemHTML + fullMenuHTML + `<div style="height: 80px;"></div>`;
+        // --- NEW FEATURES ---
+        const marqueeHTML = `
+            <div class="marquee-wrapper">
+                <div class="marquee-content">
+                    ✨ Today's Special: Enjoy the vibe with our fresh delicacies! 🍕 | Open Daily: 10 AM - 11 PM ✨
+                </div>
+            </div>`;
+
+        const footerHTML = `
+            <div class="footer-section">
+                <p>📍 Saffron Leaf, Dehradun</p>
+                <p>© 2026 Saffron Leaf | Digital Menu</p>
+            </div>`;
+
+        // Update container
+        menuContainer.innerHTML = specialItemHTML + fullMenuHTML + marqueeHTML + footerHTML;
         
         // Add Floating Button
         if(!document.getElementById('cart-float')) {
