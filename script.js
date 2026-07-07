@@ -48,16 +48,27 @@ function checkout() {
 
 async function checkWeatherAndSetTheme() {
     const menuContainer = document.getElementById("menu-container");
+    let weatherMode = "sunny"; // Default fallback agar API fail ho jaye
 
     try {
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,rain,weather_code`);
-        const data = await response.json();
-        const temp = data.current.temperature_2m;
-        const isRain = data.current.rain > 0;
-        const weatherCode = data.current.weather_code;
-        let weatherMode = (isRain || weatherCode >= 51) ? "rainy" : (temp > 25 ? "sunny" : "cold");
+        
+        // Agar response sahi hai tabhi data process karo
+        if (response.ok) {
+            const data = await response.json();
+            if (data && data.current) {
+                const temp = data.current.temperature_2m;
+                const isRain = data.current.rain > 0;
+                const weatherCode = data.current.weather_code;
+                weatherMode = (isRain || weatherCode >= 51) ? "rainy" : (temp > 25 ? "sunny" : "cold");
+            }
+        }
+    } catch (e) {
+        console.warn("Weather API unreachable, using default theme:", e);
+    }
 
-        // Fetch Firestore Special
+    // Now render the menu using whatever 'weatherMode' we have (either from API or default)
+    try {
         const snapshot = await db.collection("menu items").get();
         let specialItemHTML = "";
         snapshot.forEach(doc => {
@@ -74,7 +85,6 @@ async function checkWeatherAndSetTheme() {
             }
         });
 
-        // Generate Full Menu Grid
         let fullMenuHTML = "";
         staticMenu.forEach(cat => {
             let itemsHTML = "";
@@ -82,8 +92,8 @@ async function checkWeatherAndSetTheme() {
                 if (!item.name) return;
                 const safeName = item.name.replace(/'/g, "\\'");
                 itemsHTML += `
-                    <div class="menu-item">
-                        <h4 style="font-size: 13px; font-weight: 600; margin: 0 0 8px 0;">${item.name}</h4>
+                    <div class="menu-item" style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
+                        <h4 style="font-size: 13px; font-weight: 600; margin: 0 0 8px 0; height: 32px; overflow: hidden;">${item.name}</h4>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                             <span style="font-size: 14px; font-weight: 800; color: #10b981;">${item.price}</span>
                             <button onclick="addToCart('${safeName}', '${item.price}')" style="background: #1f2937; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Add ➕</button>
@@ -95,28 +105,17 @@ async function checkWeatherAndSetTheme() {
             </div>`;
         });
 
-        // --- NEW FEATURES ---
-        const marqueeHTML = `
-            <div class="marquee-wrapper">
-                <div class="marquee-content">
-                    ✨ Today's Special: Enjoy the vibe with our fresh delicacies! 🍕 | Open Daily: 10 AM - 11 PM ✨
-                </div>
-            </div>`;
+        const marqueeHTML = `<div class="marquee-wrapper"><div class="marquee-content">✨ Today's Special: Enjoy the vibe with our fresh delicacies! 🍕 | Open Daily: 10 AM - 11 PM ✨</div></div>`;
+        const footerHTML = `<div class="footer-section"><p>📍 Saffron Leaf, Dehradun</p><p>© 2026 Saffron Leaf | Digital Menu</p></div>`;
 
-        const footerHTML = `
-            <div class="footer-section">
-                <p>📍 Saffron Leaf, Dehradun</p>
-                <p>© 2026 Saffron Leaf | Digital Menu</p>
-            </div>`;
-
-        // Update container
         menuContainer.innerHTML = specialItemHTML + fullMenuHTML + marqueeHTML + footerHTML;
         
-        // Add Floating Button
         if(!document.getElementById('cart-float')) {
             document.body.insertAdjacentHTML('beforeend', `<div id="cart-float" style="position:fixed; bottom:20px; right:20px; background:#10b981; color:white; padding:12px 20px; border-radius:25px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.3); z-index:9999; font-weight:bold; font-size:14px;" onclick="checkout()">🛒 View Cart (0)</div>`);
         }
-    } catch (e) { console.error(e); }
+    } catch (err) {
+        console.error("Critical rendering error:", err);
+    }
 }
 
 window.onload = checkWeatherAndSetTheme;
