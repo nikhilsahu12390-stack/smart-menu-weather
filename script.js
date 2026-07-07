@@ -29,7 +29,7 @@ const staticMenu = [
     { category: "🍹 BEVERAGES", items: [{ name: "Mineral Water", price: "₹60" }, { name: "Cold Drink", price: "₹70" }, { name: "Masala Tea", price: "₹95" }, { name: "Green Tea", price: "₹80" }, { name: "Lemon Tea", price: "₹105" }, { name: "Fresh Lime Water", price: "₹100" }, { name: "Fresh Lime Soda", price: "₹120" }, { name: "Masala Lemonade", price: "₹175" }, { name: "Blue Curacao", price: "₹195" }, { name: "Virgin Mojito", price: "₹175" }, { name: "Lemon Ice Tea", price: "₹175" }, { name: "Peach Ice Tea", price: "₹175" }, { name: "Masala Chach", price: "₹145" }, { name: "Sweet Lassi", price: "₹145" }, { name: "Cold Coffee", price: "₹195" }, { name: "Cold Coffee with Ice Cream", price: "₹245" }, { name: "Soda 750 ML", price: "₹50" }] }
 ];
 
-// Add to Cart Logic
+// Functions
 function addToCart(name, price) {
     cart.push({ name, price });
     const btn = document.getElementById('cart-float');
@@ -39,38 +39,34 @@ function addToCart(name, price) {
 function checkout() {
     if (cart.length === 0) { alert("Cart is empty!"); return; }
     let msg = "Hello Doon Cafe! *New Order Alert* 🚨\n\nI want to order:\n";
-    cart.forEach((item, index) => {
-        msg += `${index + 1}. ${item.name} (${item.price})\n`;
-    });
+    cart.forEach((item, index) => { msg += `${index + 1}. ${item.name} (${item.price})\n`; });
     msg += "\nPlease prepare it!";
     window.open(`https://api.whatsapp.com/send?phone=919999999999&text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 async function checkWeatherAndSetTheme() {
     const menuContainer = document.getElementById("menu-container");
-    let weatherMode = "sunny"; // Default fallback agar API fail ho jaye
+    let weatherMode = "sunny"; // Default fallback
 
+    // 1. Try to fetch weather
     try {
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,rain,weather_code`);
-        
-        // Agar response sahi hai tabhi data process karo
         if (response.ok) {
             const data = await response.json();
-            if (data && data.current) {
-                const temp = data.current.temperature_2m;
-                const isRain = data.current.rain > 0;
-                const weatherCode = data.current.weather_code;
-                weatherMode = (isRain || weatherCode >= 51) ? "rainy" : (temp > 25 ? "sunny" : "cold");
-            }
+            const temp = data.current.temperature_2m;
+            const isRain = data.current.rain > 0;
+            const weatherCode = data.current.weather_code;
+            weatherMode = (isRain || weatherCode >= 51) ? "rainy" : (temp > 25 ? "sunny" : "cold");
         }
     } catch (e) {
-        console.warn("Weather API unreachable, using default theme:", e);
+        console.warn("Weather API down, proceeding with default mode:", e);
     }
 
-    // Now render the menu using whatever 'weatherMode' we have (either from API or default)
+    // 2. Render Menu (This part will run even if API fails)
     try {
         const snapshot = await db.collection("menu items").get();
         let specialItemHTML = "";
+        
         snapshot.forEach(doc => {
             const item = doc.data();
             if ((item.Weather || item.weather || "").toLowerCase() === weatherMode) {
@@ -92,7 +88,7 @@ async function checkWeatherAndSetTheme() {
                 if (!item.name) return;
                 const safeName = item.name.replace(/'/g, "\\'");
                 itemsHTML += `
-                    <div class="menu-item" style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
                         <h4 style="font-size: 13px; font-weight: 600; margin: 0 0 8px 0; height: 32px; overflow: hidden;">${item.name}</h4>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                             <span style="font-size: 14px; font-weight: 800; color: #10b981;">${item.price}</span>
@@ -105,16 +101,13 @@ async function checkWeatherAndSetTheme() {
             </div>`;
         });
 
-        const marqueeHTML = `<div class="marquee-wrapper"><div class="marquee-content">✨ Today's Special: Enjoy the vibe with our fresh delicacies! 🍕 | Open Daily: 10 AM - 11 PM ✨</div></div>`;
-        const footerHTML = `<div class="footer-section"><p>📍 Saffron Leaf, Dehradun</p><p>© 2026 Saffron Leaf | Digital Menu</p></div>`;
-
-        menuContainer.innerHTML = specialItemHTML + fullMenuHTML + marqueeHTML + footerHTML;
+        menuContainer.innerHTML = specialItemHTML + fullMenuHTML + `<div style="height: 80px;"></div>`;
         
         if(!document.getElementById('cart-float')) {
             document.body.insertAdjacentHTML('beforeend', `<div id="cart-float" style="position:fixed; bottom:20px; right:20px; background:#10b981; color:white; padding:12px 20px; border-radius:25px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.3); z-index:9999; font-weight:bold; font-size:14px;" onclick="checkout()">🛒 View Cart (0)</div>`);
         }
     } catch (err) {
-        console.error("Critical rendering error:", err);
+        console.error("Rendering error:", err);
     }
 }
 
