@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Atmospheric Menu</title>
+    <!-- Tailwind CSS CDN: Instant high-class UI template -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-gray-900 transition-colors duration-500 min-h-screen flex flex-col justify-between">
+
+    <!-- Header Section -->
+    <header id="app-header" class="p-4 flex justify-between items-center bg-white shadow-sm border-b transition-all">
+        <div>
+            <h1 class="text-xl font-bold tracking-tight">The Doon Cafe</h1>
+            <p class="text-xs text-gray-500">Rajpur Road, Dehradun</p>
+        </div>
+        <!-- Live Weather Badge -->
+        <span id="weather-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 transition-all animate-pulse">
+            🔄 Syncing Weather...
+        </span>
+    </header>
+
+    <!-- Dynamic Hero Banner (Mausam ke hisab se badlega) -->
+    <div id="hero-banner" class="m-4 p-6 rounded-2xl bg-gradient-to-r from-gray-700 to-gray-900 text-white shadow-md transition-all duration-500">
+        <h2 id="hero-title" class="text-2xl font-black mb-1">Welcome to Doon Cafe</h2>
+        <p id="hero-desc" class="text-sm opacity-90">Setting up your local vibe...</p>
+    </div>
+
+    <!-- Smart Menu Items Grid -->
+    <main class="p-4 flex-grow">
+        <h3 class="text-lg font-bold mb-4 px-1">Today's Special Menu</h3>
+        <div id="menu-container" class="grid grid-cols-1 gap-4">
+            
+            <!-- Item 1: Rainy Special -->
+            <div class="menu-item bg-white p-4 rounded-xl shadow-sm border flex justify-between items-center transition-all duration-300" data-weather="rainy">
+                <div>
+                    <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">1. Monsoon Special</span>
+                    <h4 class="font-bold text-lg mt-1">Adrak Chai & Bread Pakora Combo</h4>
+                    <p class="text-gray-500 text-sm">Perfect match for Dehradun's pleasant rains.</p>
+                    <p class="font-extrabold text-gray-900 mt-2">₹120</p>
+                </div>
+                <div class="text-4xl">☕</div>
+            </div>
+
+            <!-- Item 2: Sunny Special -->
+            <div class="menu-item bg-white p-4 rounded-xl shadow-sm border flex justify-between items-center transition-all duration-300" data-weather="sunny">
+                <div>
+                    <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md">2. Summer Chiller</span>
+                    <h4 class="font-bold text-lg mt-1">Premium Iced Caramel Latte</h4>
+                    <p class="text-gray-500 text-sm">Beat the afternoon heat with crushed ice espresso.</p>
+                    <p class="font-extrabold text-gray-900 mt-2">₹180</p>
+                </div>
+                <div class="text-4xl">🧋</div>
+            </div>
+
+            <!-- Item 3: Cold/Night Special -->
+            <div class="menu-item bg-white p-4 rounded-xl shadow-sm border flex justify-between items-center transition-all duration-300" data-weather="cold">
+                <div>
+                    <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">3. Winter Vibe</span>
+                    <h4 class="font-bold text-lg mt-1">Hot Chocolate with Marshmallows</h4>
+                    <p class="text-gray-500 text-sm">Rich, creamy chocolate served piping hot.</p>
+                    <p class="font-extrabold text-gray-900 mt-2">₹150</p>
+                </div>
+                <div class="text-4xl">🍫</div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer: Instantly open WhatsApp with predefined message -->
+    <footer class="p-4 bg-white border-t sticky bottom-0 shadow-lg">
+        <button onclick="sendOrder()" class="w-full bg-black text-white font-bold py-3.5 rounded-xl shadow-md hover:scale-[0.98] active:scale-[0.95] transition-all text-center block">
+            Order via WhatsApp 💬
+        </button>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
