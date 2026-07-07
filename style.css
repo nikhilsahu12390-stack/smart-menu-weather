@@ -1,0 +1,77 @@
+/* style.css */
+
+/* Smooth animation jab theme badlegi */
+body, header, div, span, .menu-item {
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =======================================================
+   🌧️ MONSOON / RAINY THEME (Jab Dehradun me baarish ho)
+   ======================================================= */
+body.theme-rainy {
+    background-color: #0f172a !important; /* Dark Blue-Grey */
+    color: #f8fafc !important;
+}
+body.theme-rainy #app-header {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+body.theme-rainy #app-header h1 { color: #ffffff !important; }
+body.theme-rainy #hero-banner {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af) !important; /* Deep Blue Vibe */
+}
+/* Baarish me sirf Rainy items dikhenge, baaki hide ho jayenge */
+body.theme-rainy .menu-item:not([data-weather="rainy"]) {
+    display: none !important;
+}
+body.theme-rainy .menu-item[data-weather="rainy"] {
+    background-color: #1e293b !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+}
+
+/* =======================================================
+   ☀️ SUNNY / SUMMER THEME (Jab dopahar ki dhoop ho)
+   ======================================================= */
+body.theme-sunny {
+    background-color: #fffbeb !important; /* Soft Amber Light */
+    color: #78350f !important;
+}
+body.theme-sunny #app-header {
+    background-color: #fef3c7 !important;
+    border-color: #fde68a !important;
+}
+body.theme-sunny #hero-banner {
+    background: linear-gradient(135deg, #f59e0b, #ea580c) !important; /* Bright Sunset/Sun look */
+}
+/* Dhoop me sirf Cold Drinks/Sunny items dikhenge */
+body.theme-sunny .menu-item:not([data-weather="sunny"]) {
+    display: none !important;
+}
+body.theme-sunny .menu-item[data-weather="sunny"] {
+    background-color: #ffffff !important;
+    border-color: #f59e0b !important;
+}
+
+/* =======================================================
+   🥶 COLD / WINTER THEME (Thand ya Raat ke waqt)
+   ======================================================= */
+body.theme-cold {
+    background-color: #f0fdfa !important; /* Ice Mint Clear White */
+    color: #115e59 !important;
+}
+body.theme-cold #app-header {
+    background-color: #ccfbf1 !important;
+    border-color: #99f6e4 !important;
+}
+body.theme-cold #hero-banner {
+    background: linear-gradient(135deg, #0d9488, #0369a1) !important; /* Ice Cold Teal Gradient */
+}
+/* Thand me sirf Hot Chocolate/Winter items dikhenge */
+body.theme-cold .menu-item:not([data-weather="cold"]) {
+    display: none !important;
+}
+body.theme-cold .menu-item[data-weather="cold"] {
+    background-color: #ffffff !important;
+    border-color: #0d9488 !important;
+}
