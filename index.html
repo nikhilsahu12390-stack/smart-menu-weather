@@ -85,7 +85,27 @@
         #hero-banner h2 { color: #FFFFFF; font-size: 2.2rem; font-weight: 500; margin-bottom: 8px; }
         #hero-banner p { font-size: 1rem; font-weight: 400; opacity: 0.85; margin: 0; }
 
-        main { padding: 1rem; flex-grow: 1; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        /* VOD/NON-VEG FILTER STYLES */
+        .food-toggle {
+            display: flex; justify-content: center; gap: 15px; margin: 0 1.5rem 2rem 1.5rem;
+        }
+        .toggle-btn {
+            padding: 10px 25px; font-size: 1rem; font-weight: 700; border-radius: 30px;
+            border: 2px solid var(--accent-color); background: rgba(255,255,255,0.6);
+            color: var(--text-main); cursor: pointer; transition: all 0.3s ease;
+            backdrop-filter: blur(5px); display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .toggle-btn:hover { transform: translateY(-2px); }
+        .toggle-btn.active-veg { background: #2e7d32; color: white; border-color: #2e7d32; }
+        .toggle-btn.active-nonveg { background: #c62828; color: white; border-color: #c62828; }
+        .indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .toggle-btn .indicator-veg { background-color: #2e7d32; border: 1px solid white; }
+        .toggle-btn.active-veg .indicator-veg { background-color: white; border: none; }
+        .toggle-btn .indicator-nonveg { background-color: #c62828; border: 1px solid white; }
+        .toggle-btn.active-nonveg .indicator-nonveg { background-color: white; border: none; }
+
+        main { padding: 0 1rem 1rem 1rem; flex-grow: 1; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; }
         
         #weather-combos-area { margin-bottom: 2rem; }
         .combo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
@@ -121,6 +141,8 @@
         }
         .cat-title::after { content: ''; flex-grow: 1; height: 2px; background-color: rgba(255,255,255,0.3); }
 
+        /* REGULAR VEG MENU GRID (Cards) */
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
         .menu-item { 
             border-radius: var(--radius-sm); 
             padding: 1.2rem 1.2rem; 
@@ -133,13 +155,35 @@
             min-height: 110px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
         }
-        
         .menu-item:hover { 
             transform: translateY(-5px); 
             background: rgba(255, 255, 255, 0.22);
             border-color: rgba(255, 255, 255, 0.5);
             box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.3);
         }
+
+        /* NEW: NON-VEG LIST LAYOUT */
+        .nonveg-list-container {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        .nonveg-item-row {
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .nonveg-item-row:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: scale(1.01);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .nonveg-item-row .item-name { margin: 0; font-size: 1.15rem; flex-grow: 1; }
+        .nonveg-price-action { display: flex; align-items: center; gap: 1.5rem; }
 
         .item-name { 
             font-size: 1.15rem; 
@@ -185,60 +229,35 @@
         .special-weather-card .add-btn:hover { transform: scale(1.03); }
 
         .custom-marquee {
-            padding: 12px 0;
-            color: #FFFFFF;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            letter-spacing: 3px;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            opacity: 0.9;
-            border-top: 1px dashed rgba(255,255,255,0.3);
-            border-bottom: 1px dashed rgba(255,255,255,0.3);
-            margin: 2rem 0 0 0;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
+            padding: 12px 0; color: #FFFFFF; font-family: 'Inter', sans-serif;
+            font-weight: 600; letter-spacing: 3px; font-size: 0.75rem; text-transform: uppercase;
+            opacity: 0.9; border-top: 1px dashed rgba(255,255,255,0.3); border-bottom: 1px dashed rgba(255,255,255,0.3);
+            margin: 2rem 0 0 0; background: rgba(0, 0, 0, 0.2); border-radius: 4px;
         }
 
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 10000;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.4s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center; z-index: 10000;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card {
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            padding: 2rem;
-            border-radius: var(--radius-md);
-            width: 90%; max-width: 380px;
-            text-align: center;
-            transform: scale(0.85);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.92); border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); padding: 2rem; border-radius: var(--radius-md);
+            width: 90%; max-width: 380px; text-align: center; transform: scale(0.85); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .modal-overlay.active .modal-card { transform: scale(1); }
         .modal-card h3 { font-family: 'Lora', serif; font-size: 1.6rem; color: var(--text-main); margin-bottom: 10px; }
         .modal-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
         .modal-input {
             width: 100%; padding: 12px; font-size: 1.1rem; font-weight: 600;
-            border: 2px solid var(--border-color); border-radius: var(--radius-sm);
-            text-align: center; box-sizing: border-box; margin-bottom: 1.5rem;
-            font-family: 'Inter', sans-serif; outline: none;
-            transition: border-color 0.2s;
+            border: 2px solid var(--border-color); border-radius: var(--radius-sm); text-align: center; box-sizing: border-box; margin-bottom: 1.5rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
         }
         .modal-input:focus { border-color: var(--accent-color); }
         .modal-buttons { display: flex; gap: 10px; justify-content: center; }
         .modal-btn {
-            padding: 12px 24px; font-size: 0.95rem; font-weight: 700;
-            border-radius: var(--radius-sm); cursor: pointer; border: none;
-            font-family: 'Inter', sans-serif; flex: 1; transition: all 0.2s;
+            padding: 12px 24px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; border: none; font-family: 'Inter', sans-serif; flex: 1; transition: all 0.2s;
         }
         .modal-btn.confirm { background: var(--text-main); color: #FFFFFF; }
         .modal-btn.confirm:hover { background: var(--accent-color); }
@@ -252,21 +271,14 @@
         }
         .gallery-title { text-align: center; font-size: 1.6rem; margin-bottom: 1.5rem; }
         
-        .gallery-container::before, .gallery-container::after {
-            content: ""; position: absolute; top: 0; width: 50px; height: 100%; z-index: 2;
-        }
+        .gallery-container::before, .gallery-container::after { content: ""; position: absolute; top: 0; width: 50px; height: 100%; z-index: 2; }
         .gallery-container::before { left: 0; background: linear-gradient(to right, var(--bg-gradient), transparent); }
         .gallery-container::after { right: 0; background: linear-gradient(to left, var(--bg-gradient), transparent); }
         
-        .gallery-track {
-            display: flex; gap: 1.5rem; width: max-content;
-            animation: slideGallery 25s linear infinite;
-        }
+        .gallery-track { display: flex; gap: 1.5rem; width: max-content; animation: slideGallery 25s linear infinite; }
         .gallery-track:hover { animation-play-state: paused; }
         .gallery-track img {
-            width: 280px; height: 200px; object-fit: cover;
-            border-radius: var(--radius-md); box-shadow: var(--shadow-subtle);
-            border: 1px solid var(--card-border); transition: transform 0.3s ease; cursor: pointer;
+            width: 280px; height: 200px; object-fit: cover; border-radius: var(--radius-md); box-shadow: var(--shadow-subtle); border: 1px solid var(--card-border); transition: transform 0.3s ease; cursor: pointer;
         }
         .gallery-track img:hover { transform: scale(1.05); box-shadow: var(--shadow-hover); border-color: var(--accent-color); }
 
@@ -285,8 +297,6 @@
         }
         #cart-float:hover { transform: translateY(-4px); }
         
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
-
         @media (max-width: 600px) {
             #hero-banner { padding: 2rem 1rem; margin: 1rem; }
             #hero-banner h2 { font-size: 1.6rem; }
@@ -297,6 +307,11 @@
             .category-section { padding: 1.5rem 1rem; margin-bottom: 2rem; }
             .menu-grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); gap: 1rem; }
             .cat-title { font-size: 1.4rem; }
+            .food-toggle { margin-bottom: 1.5rem; gap: 10px; }
+            .toggle-btn { padding: 8px 18px; font-size: 0.9rem; }
+            
+            .nonveg-item-row { flex-direction: column; align-items: flex-start; gap: 10px; padding: 1.2rem; }
+            .nonveg-price-action { width: 100%; justify-content: space-between; }
         }
     </style>
 </head>
@@ -304,14 +319,24 @@
     <header id="app-header">
         <div>
             <h1 class="header-title">Godavari</h1>
-            <p class="header-subtitle">Ruchulu, Ka Vantalu</p>
+            <p class="header-subtitle">DAKSHINI KI SWAD</p>
         </div>
         <span id="weather-badge" class="weather-pill">Syncing...</span>
     </header>
 
     <div id="hero-banner">
         <h2 id="hero-title">Welcome to Godavari</h2>
-        <p id="hero-desc">Authentic Pure Vegetarian South Indian Delights.</p>
+        <p id="hero-desc">Authentic South Indian Delights.</p>
+    </div>
+
+    <!-- VEG / NON-VEG TOGGLE -->
+    <div class="food-toggle">
+        <button id="btn-veg" class="toggle-btn active-veg" onclick="setFoodMode('veg')">
+            <span class="indicator indicator-veg"></span> Veg
+        </button>
+        <button id="btn-nonveg" class="toggle-btn" onclick="setFoodMode('nonveg')">
+            <span class="indicator indicator-nonveg"></span> Non-Veg
+        </button>
     </div>
 
     <main>
@@ -349,8 +374,8 @@
     </section>
 
     <footer>
-        <h3>Godavari - Ruchulu Ka Vantalu</h3>
-        <p>Pure Vegetarian South Indian Cuisine</p>
+        <h3>Godavari - DASHINI KI SWAD</h3>
+        <p>Authentic South Indian Cuisine</p>
         <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.7;">
             &copy; 2026 Godavari. All Rights Reserved. <br>
             Made with <span class="heart">❤</span> for Authentic Taste.
@@ -376,81 +401,97 @@
         let cart = [];
         const LAT = "30.3165";
         const LON = "78.0322";
+        
+        let currentFoodMode = 'veg'; 
+        let globalWeatherMode = "sunny";
+        let firestoreSpecialItems = []; 
 
         const weatherCombos = {
             sunny: [
-                { name: "Sunny Splash", price: "₹150" },
-                { name: "Cooler Combo", price: "₹180" },
-                { name: "Mango Treat", price: "₹199" }
+                { name: "Sunny Splash", price: "₹150", type: "veg" },
+                { name: "Cooler Combo", price: "₹180", type: "veg" },
+                { name: "Mango Treat", price: "₹199", type: "veg" },
+                { name: "Chicken 65 Cooler Combo", price: "₹250", type: "nonveg" }
             ],
             rainy: [
-                { name: "Hot Chai Pakora", price: "₹199" },
-                { name: "Soupy Idli", price: "₹150" },
-                { name: "Rainy Vada", price: "₹160" }
+                { name: "Hot Chai Pakora", price: "₹199", type: "veg" },
+                { name: "Soupy Idli", price: "₹150", type: "veg" },
+                { name: "Rainy Vada", price: "₹160", type: "veg" },
+                { name: "Pepper Chicken Soup Combo", price: "₹240", type: "nonveg" }
             ],
             cold: [
-                { name: "Warm Hug Meal", price: "₹250" },
-                { name: "Masala Coffee", price: "₹120" },
-                { name: "Spicy Soup", price: "₹180" }
+                { name: "Warm Hug Meal", price: "₹250", type: "veg" },
+                { name: "Masala Coffee", price: "₹120", type: "veg" },
+                { name: "Spicy Soup", price: "₹180", type: "veg" },
+                { name: "Mutton Paya Soup Meal", price: "₹350", type: "nonveg" }
             ],
             summer: [
-                { name: "Summer Breeze", price: "₹220" },
-                { name: "Refreshing Lime", price: "₹140" },
-                { name: "Lassi Blast", price: "₹190" }
+                { name: "Summer Breeze", price: "₹220", type: "veg" },
+                { name: "Refreshing Lime", price: "₹140", type: "veg" },
+                { name: "Lassi Blast", price: "₹190", type: "veg" }
             ]
         };
 
         const staticMenu = [
             { category: "IDLI", image: "idli.jpg", items: [
-                { name: "Idli (2)", price: "₹99" }, { name: "Button Idli (10)", price: "₹149" }, { name: "Ghee Idli (2)", price: "₹139" }, { name: "Sambar Idli (2)", price: "₹129" }, { name: "Idli Vada (1,1)", price: "₹119" }, { name: "Extra Sambar", price: "₹30" }
+                { name: "Idli (2)", price: "₹99", type: "veg" }, { name: "Button Idli (10)", price: "₹149", type: "veg" }, { name: "Ghee Idli (2)", price: "₹139", type: "veg" }, { name: "Sambar Idli (2)", price: "₹129", type: "veg" }, { name: "Idli Vada (1,1)", price: "₹119", type: "veg" }, { name: "Extra Sambar", price: "₹30", type: "veg" },
+                { name: "Chicken Keema Idli (2)", price: "₹189", type: "nonveg" }
             ]},
             { category: "VADA", image: "vada.jpg", items: [
-                { name: "Vada (1)", price: "₹69" }, { name: "Vada (2)", price: "₹119" }, { name: "Sambar Vada (2)", price: "₹149" }, { name: "Dahi Vada (1)", price: "₹99" }
+                { name: "Vada (1)", price: "₹69", type: "veg" }, { name: "Vada (2)", price: "₹119", type: "veg" }, { name: "Sambar Vada (2)", price: "₹149", type: "veg" }, { name: "Dahi Vada (1)", price: "₹99", type: "veg" },
+                { name: "Mutton Keema Vada (2)", price: "₹210", type: "nonveg" }
             ]},
             { category: "UTTAPAM", image: "uttapam.jpg", items: [
-                { name: "Plain Uttapam", price: "₹119" }, { name: "Onion Uttapam", price: "₹149" }, { name: "Vegetable Uttapam", price: "₹189" }, { name: "Paneer Uttapam", price: "₹179" }, { name: "Ghee Plain Uttapam", price: "₹159" }, { name: "Ghee Paneer Uttapam", price: "₹209" }, { name: "Butter Plain Uttapam", price: "₹149" }, { name: "Butter Paneer Uttapam", price: "₹199" }
+                { name: "Plain Uttapam", price: "₹119", type: "veg" }, { name: "Onion Uttapam", price: "₹149", type: "veg" }, { name: "Vegetable Uttapam", price: "₹189", type: "veg" }, { name: "Paneer Uttapam", price: "₹179", type: "veg" }, { name: "Ghee Plain Uttapam", price: "₹159", type: "veg" }, { name: "Ghee Paneer Uttapam", price: "₹209", type: "veg" }, { name: "Butter Plain Uttapam", price: "₹149", type: "veg" }, { name: "Butter Paneer Uttapam", price: "₹199", type: "veg" },
+                { name: "Egg Uttapam", price: "₹169", type: "nonveg" }, { name: "Chicken Tikka Uttapam", price: "₹229", type: "nonveg" },{ name: "Chicken panner", price: "₹229", type: "nonveg" } 
             ]},
             { category: "PONGAL", image: "pongal.jpg", items: [
-                { name: "Kattu Pongal", price: "₹169" }
+                { name: "Kattu Pongal", price: "₹169", type: "veg" }
             ]},
             { category: "SNACKS", image: "snacks.jpg", items: [
-                { name: "Mysore bajji (4)", price: "₹139" }, { name: "Challa Punugulu", price: "₹129" }, { name: "Mirapakaya bajji Plain(3)", price: "₹109" }, { name: "Mirapakaya bajji(3) (Stuffed)", price: "₹139" }, { name: "Raw banana bajji (3) Plain", price: "₹109" }, { name: "Raw banana bajji (3) (Stuffed)", price: "₹139" }, { name: "Onion pakoda", price: "₹139" }
+                { name: "Mysore bajji (4)", price: "₹139", type: "veg" }, { name: "Challa Punugulu", price: "₹129", type: "veg" }, { name: "Mirapakaya bajji Plain(3)", price: "₹109", type: "veg" }, { name: "Mirapakaya bajji(3) (Stuffed)", price: "₹139", type: "veg" }, { name: "Raw banana bajji (3) Plain", price: "₹109", type: "veg" }, { name: "Raw banana bajji (3) (Stuffed)", price: "₹139", type: "veg" }, { name: "Onion pakoda", price: "₹139", type: "veg" },
+                { name: "Chicken Pakoda", price: "₹199", type: "nonveg" }, { name: "Egg Bonda (2)", price: "₹129", type: "nonveg" }
             ]},
             { category: "RICE SPECIALS", image: "rice_special.jpg", items: [
-                { name: "Tamarind rice (pulihora)", price: "₹149" }, { name: "Lemon rice", price: "₹149" }, { name: "Curd rice", price: "₹149" }, { name: "Dal rice", price: "₹169" }, { name: "Tomato rice", price: "₹169" }
+                { name: "Tamarind rice (pulihora)", price: "₹149", type: "veg" }, { name: "Lemon rice", price: "₹149", type: "veg" }, { name: "Curd rice", price: "₹149", type: "veg" }, { name: "Dal rice", price: "₹169", type: "veg" }, { name: "Tomato rice", price: "₹169", type: "veg" },
+                { name: "Chicken Dum Biryani", price: "₹299", type: "nonveg" }, { name: "Mutton Pulao", price: "₹349", type: "nonveg" }
             ]},
             { category: "SUMMER SPECIAL", image: "summer_special.jpg", items: [
-                { name: "Lemon Juice", price: "₹70" }, { name: "Lassi", price: "₹100" }, { name: "Mango Lassi", price: "₹130" }, { name: "Butter Milk", price: "₹80" }
+                { name: "Lemon Juice", price: "₹70", type: "veg" }, { name: "Lassi", price: "₹100", type: "veg" }, { name: "Mango Lassi", price: "₹130", type: "veg" }, { name: "Butter Milk", price: "₹80", type: "veg" }
             ]},
             { category: "DOSA", image: "dosa.jpg", items: [
-                { name: "Plain Dosa", price: "₹99" }, { name: "Butter Plain Dosa", price: "₹129" }, { name: "Onion Dosa", price: "₹129" }, { name: "Ghee Dosa", price: "₹129" }, { name: "Masala Dosa", price: "₹149" }, { name: "Onion Masala Dosa", price: "₹169" }, { name: "Butter Onion Masala Dosa", price: "₹189" }, { name: "Ghee Masala Dosa", price: "₹179" }, { name: "Butter Masala Dosa", price: "₹169" }, { name: "Rava Dosa", price: "₹149" }, { name: "Onion Rava Dosa", price: "₹169" }, { name: "Onion Rava Masala Dosa", price: "₹199" }, { name: "Paneer Dosa", price: "₹159" }, { name: "Ghee Paneer Dosa", price: "₹189" }, { name: "Paneer Masala Dosa", price: "₹189" }, { name: "Paneer Butter Masala Dosa", price: "₹209" }, { name: "Bahubali Dosa", price: "₹169" }, { name: "Bahubali Masala Dosa", price: "₹219" }
+                { name: "Plain Dosa", price: "₹99", type: "veg" }, { name: "Butter Plain Dosa", price: "₹129", type: "veg" }, { name: "Onion Dosa", price: "₹129", type: "veg" }, { name: "Ghee Dosa", price: "₹129", type: "veg" }, { name: "Masala Dosa", price: "₹149", type: "veg" }, { name: "Onion Masala Dosa", price: "₹169", type: "veg" }, { name: "Butter Onion Masala Dosa", price: "₹189", type: "veg" }, { name: "Ghee Masala Dosa", price: "₹179", type: "veg" }, { name: "Butter Masala Dosa", price: "₹169", type: "veg" }, { name: "Rava Dosa", price: "₹149", type: "veg" }, { name: "Onion Rava Dosa", price: "₹169", type: "veg" }, { name: "Onion Rava Masala Dosa", price: "₹199", type: "veg" }, { name: "Paneer Dosa", price: "₹159", type: "veg" }, { name: "Ghee Paneer Dosa", price: "₹189", type: "veg" }, { name: "Paneer Masala Dosa", price: "₹189", type: "veg" }, { name: "Paneer Butter Masala Dosa", price: "₹209", type: "veg" }, { name: "Bahubali Dosa", price: "₹169", type: "veg" }, { name: "Bahubali Masala Dosa", price: "₹219", type: "veg" },
+                { name: "Egg Dosa", price: "₹159", type: "nonveg" }, { name: "Chicken Masala Dosa", price: "₹229", type: "nonveg" }, { name: "Mutton Keema Dosa", price: "₹269", type: "nonveg" }
             ]},
             { category: "ANDHRA SPECIAL", image: "andhra_special.jpg", items: [
-                { name: "Plain Pesarattu (Moong Dal Dosa)", price: "₹129" }, { name: "Onion Pesarattu", price: "₹149" }, { name: "Butter Onion Pesarattu", price: "₹169" }, { name: "Pesarattu Upma", price: "₹179" }, { name: "Upma Plain", price: "₹99" }, { name: "Vegetable Upma", price: "₹129" }
+                { name: "Plain Pesarattu (Moong Dal Dosa)", price: "₹129", type: "veg" }, { name: "Onion Pesarattu", price: "₹149", type: "veg" }, { name: "Butter Onion Pesarattu", price: "₹169", type: "veg" }, { name: "Pesarattu Upma", price: "₹179", type: "veg" }, { name: "Upma Plain", price: "₹99", type: "veg" }, { name: "Vegetable Upma", price: "₹129", type: "veg" },
+                { name: "Chicken Pesarattu", price: "₹219", type: "nonveg" }
             ]},
             { category: "PODI-DOSA", image: "podi_dosa.jpg", items: [
-                { name: "Podi Dosa", price: "₹129" }, { name: "Onion Podi Dosa", price: "₹149" }, { name: "Butter Podi Dosa", price: "₹169" }, { name: "Ghee Podi Dosa", price: "₹179" }, { name: "Ghee Podi Masala Dosa", price: "₹199" }, { name: "Paneer Podi Dosa", price: "₹199" }, { name: "Masala Podi Dosa", price: "₹189" }, { name: "Bahubali Podi Dosa", price: "₹249" }
+                { name: "Podi Dosa", price: "₹129", type: "veg" }, { name: "Onion Podi Dosa", price: "₹149", type: "veg" }, { name: "Butter Podi Dosa", price: "₹169", type: "veg" }, { name: "Ghee Podi Dosa", price: "₹179", type: "veg" }, { name: "Ghee Podi Masala Dosa", price: "₹199", type: "veg" }, { name: "Paneer Podi Dosa", price: "₹199", type: "veg" }, { name: "Masala Podi Dosa", price: "₹189", type: "veg" }, { name: "Bahubali Podi Dosa", price: "₹249", type: "veg" }
             ]},
             { category: "PODI-UTTAPAM", image: "podi_uttapam.jpg", items: [
-                { name: "Podi Uttapam", price: "₹149" }, { name: "Onion Podi Uttapam", price: "₹169" }, { name: "Ghee Podi Uttapam", price: "₹199" }, { name: "Butter Podi Uttapam", price: "₹189" }, { name: "Paneer Podi Uttapam", price: "₹209" }
+                { name: "Podi Uttapam", price: "₹149", type: "veg" }, { name: "Onion Podi Uttapam", price: "₹169", type: "veg" }, { name: "Ghee Podi Uttapam", price: "₹199", type: "veg" }, { name: "Butter Podi Uttapam", price: "₹189", type: "veg" }, { name: "Paneer Podi Uttapam", price: "₹209", type: "veg" }
             ]},
             { category: "PODI-IDLI", image: "podi_idli.jpg", items: [
-                { name: "Podi Idli (2)", price: "₹129" }, { name: "Ghee Podi Idli (2)", price: "₹169" }, { name: "Butter Podi Idli (2)", price: "₹159" }
+                { name: "Podi Idli (2)", price: "₹129", type: "veg" }, { name: "Ghee Podi Idli (2)", price: "₹169", type: "veg" }, { name: "Butter Podi Idli (2)", price: "₹159", type: "veg" }
             ]},
             { category: "ANDHRA SPECIAL MEALS", image: "andhra_meals.jpg", items: [
-                { name: "Meals (Rice, Sambar, Pappu, Fry, Curry, Curd, Sweet)", price: "₹299" }
+                { name: "Meals (Rice, Sambar, Pappu, Fry, Curry, Curd, Sweet)", price: "₹299", type: "veg" },
+                { name: "Non-Veg Meals (Rice, Chicken Curry, Fish Fry, Rasam)", price: "₹399", type: "nonveg" }
             ]},
             { category: "GODAVARII COMBO", image: "godavari_combo.jpg", items: [
-                { name: "Combo (Idli 1, Vada 1, Mini Dosa 1, Mini Pesarattu 1, Mini Uttapam 1, Filter Coffee)", price: "₹299" }
+                { name: "Combo (Idli 1, Vada 1, Mini Dosa 1, Mini Pesarattu 1, Mini Uttapam 1, Filter Coffee)", price: "₹299", type: "veg" },
+                { name: "Non-Veg Combo (Egg Dosa, Chicken Vada, Chicken 65, Cola)", price: "₹399", type: "nonveg" }
             ]},
             { category: "COFFEE/TEA", image: "coffee_tea.jpg", items: [
-                { name: "Instant Coffee", price: "₹50" }, { name: "Filter Coffee", price: "₹60" }, { name: "Black Coffee", price: "₹40" }, { name: "Cold Coffee", price: "₹130" }, { name: "Tea", price: "₹50" }
+                { name: "Instant Coffee", price: "₹50", type: "veg" }, { name: "Filter Coffee", price: "₹60", type: "veg" }, { name: "Black Coffee", price: "₹40", type: "veg" }, { name: "Cold Coffee", price: "₹130", type: "veg" }, { name: "Tea", price: "₹50", type: "veg" }
             ]},
             { category: "FRESH JUICES & SHAKES", image: "shakes.jpg", items: [
-                { name: "Mosambi / Pineapple / Watermelon", price: "₹100" }, { name: "Chocolate / Oreo Shake", price: "₹130" }, { name: "Kit Kat Shake", price: "₹150" }
+                { name: "Mosambi / Pineapple / Watermelon", price: "₹100", type: "veg" }, { name: "Chocolate / Oreo Shake", price: "₹130", type: "veg" }, { name: "Kit Kat Shake", price: "₹150", type: "veg" }
             ]},
             { category: "BEVERAGES & DESSERTS", image: "beverages.jpg", items: [
-                { name: "Soft Drinks / Water Bottle", price: "₹25" }, { name: "Diet Coke", price: "₹50" }, { name: "Fruit Custard", price: "₹100" }, { name: "Rava Kesari", price: "₹169" }
+                { name: "Soft Drinks / Water Bottle", price: "₹25", type: "veg" }, { name: "Diet Coke", price: "₹50", type: "veg" }, { name: "Fruit Custard", price: "₹100", type: "veg" }, { name: "Rava Kesari", price: "₹169", type: "veg" }
             ]}
         ];
 
@@ -462,26 +503,134 @@
             }
         }
 
-        function renderWeatherCombos(mode) {
-            const container = document.getElementById("weather-combos-area");
-            const combos = weatherCombos[mode] || weatherCombos.sunny;
+        function setFoodMode(mode) {
+            currentFoodMode = mode;
+            document.getElementById('btn-veg').classList.remove('active-veg');
+            document.getElementById('btn-nonveg').classList.remove('active-nonveg');
             
-            let html = `<div style="margin-bottom: 2rem;">
-                            <h3 class="combo-title">Weather Specials</h3>
-                            <div class="combo-grid">`;
-            combos.forEach(item => {
-                html += `
-                    <div class="menu-item" style="min-height: auto; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05);">
-                        <h4 class="item-name" style="margin-bottom: 10px;">${item.name}</h4>
-                        <div class="item-bottom">
-                            <span class="item-price">${item.price}</span>
-                            <button class="add-btn" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', '${item.price}')">Add</button>
-                        </div>
-                    </div>
-                `;
+            if (mode === 'veg') {
+                document.getElementById('btn-veg').classList.add('active-veg');
+            } else {
+                document.getElementById('btn-nonveg').classList.add('active-nonveg');
+            }
+            renderMenu();
+        }
+
+        function renderMenu() {
+            const menuContainer = document.getElementById("menu-container");
+            
+            // 1. Weather Combos
+            const combos = weatherCombos[globalWeatherMode] || weatherCombos.sunny;
+            const filteredCombos = combos.filter(item => item.type === currentFoodMode || !item.type);
+            
+            let comboHTML = '';
+            if (filteredCombos.length > 0) {
+                comboHTML = `<div style="margin-bottom: 2rem;">
+                                <h3 class="combo-title">Weather Specials</h3>
+                                <div class="combo-grid">`;
+                filteredCombos.forEach(item => {
+                    comboHTML += `
+                        <div class="menu-item" style="min-height: auto; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05);">
+                            <h4 class="item-name" style="margin-bottom: 10px;">${item.name}</h4>
+                            <div class="item-bottom">
+                                <span class="item-price">${item.price}</span>
+                                <button class="add-btn" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', '${item.price}')">Add</button>
+                            </div>
+                        </div>`;
+                });
+                comboHTML += `</div></div>`;
+            }
+
+            // 2. Chef's Special (From Firestore)
+            let specialItemHTML = "";
+            firestoreSpecialItems.forEach(item => {
+                const itemType = (item.type || 'veg').toLowerCase();
+                if (((item.Weather || item.weather || "").toLowerCase() === globalWeatherMode) && itemType === currentFoodMode) {
+                    const name = item.Name || item.name || "Chef's Special";
+                    const price = item.Price || item.price || "₹0";
+                    specialItemHTML = `
+                    <div class="special-weather-card">
+                        <h4>Today's Chef Recommendation</h4>
+                        <h3>${name}</h3>
+                        <p>${price}</p>
+                        <button class="add-btn" onclick="addToCart('${name.replace(/'/g, "\\'")}', '${price}')">Add to Order</button>
+                    </div>`;
+                }
             });
-            html += `</div></div>`;
-            container.innerHTML = html;
+
+            // 3. Main Menu Logic
+            let fullMenuHTML = "";
+            
+            if (currentFoodMode === 'nonveg') {
+                // If NON-VEG is selected, group EVERYTHING into ONE list
+                let allNonVegItems = [];
+                staticMenu.forEach(cat => {
+                    let nonVegs = cat.items.filter(item => item.type === 'nonveg');
+                    allNonVegItems = allNonVegItems.concat(nonVegs);
+                });
+
+                if (allNonVegItems.length > 0) {
+                    let itemsHTML = "";
+                    allNonVegItems.forEach(item => {
+                        const safeName = item.name.replace(/'/g, "\\'");
+                        itemsHTML += `
+                            <div class="nonveg-item-row">
+                                <h4 class="item-name">${item.name}</h4>
+                                <div class="nonveg-price-action">
+                                    <span class="item-price">${item.price}</span>
+                                    <button class="add-btn" onclick="addToCart('${safeName}', '${item.price}')">Add</button>
+                                </div>
+                            </div>`;
+                    });
+
+                    fullMenuHTML += `
+                    <div class="category-section" style="background-image: url('nonveg.jpg');">
+                        <h3 class="cat-title">Non-Veg Specials</h3>
+                        <div class="nonveg-list-container">${itemsHTML}</div>
+                        <marquee direction="left" scrollamount="6" class="custom-marquee">
+                            ✦ PREMIUM NON-VEG ✦ AUTHENTIC TASTE ✦ RICH SPICES ✦ FRESH INGREDIENTS ✦
+                        </marquee>
+                    </div>`;
+                } else {
+                    fullMenuHTML = `<div style="text-align: center; color: var(--text-muted);">No Non-Veg items available.</div>`;
+                }
+                
+            } else {
+                // If VEG is selected, keep the normal category-by-category cards
+                staticMenu.forEach((cat, index) => {
+                    const filteredItems = cat.items.filter(item => item.type === currentFoodMode);
+                    if (filteredItems.length === 0) return;
+
+                    let itemsHTML = "";
+                    filteredItems.forEach(item => {
+                        const safeName = item.name.replace(/'/g, "\\'");
+                        itemsHTML += `
+                            <div class="menu-item">
+                                <h4 class="item-name">${item.name}</h4>
+                                <div class="item-bottom">
+                                    <span class="item-price">${item.price}</span>
+                                    <button class="add-btn" onclick="addToCart('${safeName}', '${item.price}')">Add</button>
+                                </div>
+                            </div>`;
+                    });
+                    
+                    let marqueeDirection = index % 2 === 0 ? "right" : "left";
+                    let marqueeHTML = `
+                        <marquee direction="${marqueeDirection}" scrollamount="6" class="custom-marquee">
+                            ✦ PURE VEGETARIAN ✦ AUTHENTIC SOUTH INDIAN TASTE ✦ HANDCRAFTED WITH LOVE ✦
+                        </marquee>
+                    `;
+
+                    fullMenuHTML += `
+                    <div class="category-section" style="background-image: url('${cat.image || ''}');">
+                        <h3 class="cat-title">${cat.category}</h3>
+                        <div class="menu-grid">${itemsHTML}</div>
+                        ${marqueeHTML}
+                    </div>`;
+                });
+            }
+
+            menuContainer.innerHTML = `<div id="weather-combos-area">${comboHTML}</div>` + specialItemHTML + fullMenuHTML + `<div style="height: 30px;"></div>`;
         }
 
         function checkout() {
@@ -505,9 +654,6 @@
         }
 
         async function checkWeatherAndSetTheme() {
-            const menuContainer = document.getElementById("menu-container");
-            let weatherMode = "sunny";
-
             try {
                 const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,rain,weather_code`);
                 if (response.ok) {
@@ -516,89 +662,40 @@
                     const isRain = data.current.rain > 0;
                     const weatherCode = data.current.weather_code;
                     
-                    weatherMode = (isRain || weatherCode >= 51) ? "rainy" : (temp > 25 ? "sunny" : "cold");
-                    document.body.className = `theme-${weatherMode}`;
+                    globalWeatherMode = (isRain || weatherCode >= 51) ? "rainy" : (temp > 25 ? "sunny" : "cold");
+                    document.body.className = `theme-${globalWeatherMode}`;
                     
-                    let weatherIcon = weatherMode === 'sunny' ? '☀️' : (weatherMode === 'rainy' ? '🌧️' : '❄️');
-                    let weatherText = weatherMode === 'sunny' ? 'Sunny' : (weatherMode === 'rainy' ? 'Rainy' : 'Chilly');
+                    let weatherIcon = globalWeatherMode === 'sunny' ? '☀️' : (globalWeatherMode === 'rainy' ? '🌧️' : '❄️');
+                    let weatherText = globalWeatherMode === 'sunny' ? 'Sunny' : (globalWeatherMode === 'rainy' ? 'Rainy' : 'Chilly');
                     document.getElementById("weather-badge").innerHTML = `${weatherIcon} ${temp}°C (${weatherText})`;
                 } else {
                     throw new Error("API Response not OK");
                 }
             } catch (e) {
                 console.warn("Weather API down:", e);
-                // Random fallback logic
                 const modes = ['sunny', 'rainy', 'cold'];
-                weatherMode = modes[Math.floor(Math.random() * modes.length)];
-                document.body.className = `theme-${weatherMode}`;
+                globalWeatherMode = modes[Math.floor(Math.random() * modes.length)];
+                document.body.className = `theme-${globalWeatherMode}`;
                 document.getElementById("weather-badge").innerText = "Weather Offline"; 
             }
 
             try {
                 const snapshot = await db.collection("menu items").get();
-                let specialItemHTML = "";
-                
                 snapshot.forEach(doc => {
-                    const item = doc.data();
-                    if ((item.Weather || item.weather || "").toLowerCase() === weatherMode) {
-                        const name = item.Name || item.name || "Chef's Special";
-                        const price = item.Price || item.price || "₹0";
-                        specialItemHTML = `
-                        <div class="special-weather-card">
-                            <h4>Today's Chef Recommendation</h4>
-                            <h3>${name}</h3>
-                            <p>${price}</p>
-                            <button class="add-btn" onclick="addToCart('${name.replace(/'/g, "\\'")}', '${price}')">Add to Order</button>
-                        </div>`;
-                    }
+                    firestoreSpecialItems.push(doc.data());
                 });
+            } catch(e) {
+                console.warn("Firestore fetch error: ", e);
+            }
 
-                let fullMenuHTML = "";
-                staticMenu.forEach((cat, index) => {
-                    let itemsHTML = "";
-                    cat.items.forEach(item => {
-                        if (!item.name) return;
-                        const safeName = item.name.replace(/'/g, "\\'");
-                        
-                        itemsHTML += `
-                            <div class="menu-item">
-                                <h4 class="item-name">${item.name}</h4>
-                                <div class="item-bottom">
-                                    <span class="item-price">${item.price}</span>
-                                    <button class="add-btn" onclick="addToCart('${safeName}', '${item.price}')">Add</button>
-                                </div>
-                            </div>`;
-                    });
-                    
-                    let marqueeDirection = index % 2 === 0 ? "right" : "left";
-                    let marqueeHTML = `
-                        <marquee direction="${marqueeDirection}" scrollamount="6" class="custom-marquee">
-                            ✦ PURE VEGETARIAN ✦ AUTHENTIC SOUTH INDIAN TASTE ✦ HANDCRAFTED WITH LOVE ✦ FRESH INGREDIENTS ✦
-                        </marquee>
-                    `;
+            renderMenu();
 
-                    fullMenuHTML += `
-                    <div class="category-section" style="background-image: url('${cat.image || ''}');">
-                        <h3 class="cat-title">${cat.category}</h3>
-                        <div class="menu-grid">${itemsHTML}</div>
-                        ${marqueeHTML}
-                    </div>`;
-                });
-
-                menuContainer.innerHTML = `<div id="weather-combos-area"></div>` + specialItemHTML + fullMenuHTML + `<div style="height: 30px;"></div>`;
-                
-                renderWeatherCombos(weatherMode);
-                
-                if(!document.getElementById('cart-float')) {
-                    document.body.insertAdjacentHTML('beforeend', `
-                    <div id="cart-float" onclick="checkout()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                        Cart (0)
-                    </div>`);
-                }
-            } catch (err) {
-                console.error("Rendering error:", err);
-                menuContainer.innerHTML = `<p style="text-align:center; color:var(--accent-color);">Unable to load menu. Please refresh.</p>`;
+            if(!document.getElementById('cart-float')) {
+                document.body.insertAdjacentHTML('beforeend', `
+                <div id="cart-float" onclick="checkout()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    Cart (0)
+                </div>`);
             }
         }
 
